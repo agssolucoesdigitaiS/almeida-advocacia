@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { M, MX, box, mesh, tree, plant, skyTexture, sunLight, setSeed, rr, rnd, figure } from './lib.js';
+import { M, MX, box, mesh, tree, plant, skyTexture, sunLight, setSeed, rr, rnd, figure, book, bookRow, openBook, folderTex, wallSignTex } from './lib.js';
 
 // Renders demonstrativos da ALMEIDA ADVOCACIA — ambientes corporativos sóbrios, sem símbolos jurídicos clichês.
 
@@ -198,9 +198,152 @@ function contractMacro(scene) {
 }
 
 // ======================================================================
+// CENAS JURÍDICAS — biblioteca de legislação, análise de documentos, reunião
+// ======================================================================
+function folder(scene, x, z, w, d, rotY, label) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rotY; scene.add(g);
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, .03, d), new THREE.MeshStandardMaterial({ color: '#3a2d22', roughness: .7 })); body.position.y = .015; body.castShadow = true; body.receiveShadow = true; g.add(body);
+  const top = new THREE.Mesh(new THREE.PlaneGeometry(w, d).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: folderTex(label), roughness: .7 })); top.position.y = .031; top.receiveShadow = true; g.add(top);
+  return g;
+}
+function shelves(scene, x0, x1, z, levels = 6, y0 = .3, gap = .42, seed = 5) {
+  const wood = MX('walnut');
+  for (let j = 0; j < levels; j++) { box(scene, [x0, y0 + j * gap - .03, z - .3], [x1, y0 + j * gap, z + .02], wood, 1); bookRow(scene, x0 + .03, x1 - .03, y0 + j * gap, z - .14, .27, .36, .24, seed + j); }
+  for (let x = x0; x <= x1 + .01; x += (x1 - x0) / Math.max(1, Math.round((x1 - x0) / 1.2))) box(scene, [x - .025, y0 - .3, z - .3], [x + .025, y0 + levels * gap, z + .02], wood, 1);
+  box(scene, [x0 - .05, y0 - .3, z - .34], [x1 + .05, y0 + levels * gap + .05, z - .3], wood, 2);
+}
+function legalLibrary(scene) {
+  setSeed(201);
+  box(scene, [-6, -.2, -5], [6, 0, 5], M('wood', { tone: .42, slat: false }), 2);
+  box(scene, [-6, 3.4, -5], [6, 3.6, 5], M('plaster', { base: [70, 68, 62], key: 'lc2' }), 3);
+  box(scene, [-6.2, 0, -5.2], [6.2, 3.4, -5], MX('walnut'), 2);
+  shelves(scene, -5.6, 5.6, -4.66, 7, .3, .42, 11);
+  // parede da janela à direita, com montantes
+  const metal = M('metal', { color: 0x151615 });
+  for (let z = -5; z <= 5; z += 1.4) box(scene, [6, 0, z - .04], [6.1, 3.4, z + .04], metal, 1);
+  box(scene, [-6.2, 0, -5], [-6, 3.4, 5], MX('walnut'), 2);
+  // mesa longa com documentos e código aberto
+  const table = MX('walnut');
+  box(scene, [-2.6, .74, -1.9], [2.6, .8, -.5], table, 2); box(scene, [-2.4, 0, -1.7], [-2.2, .74, -.7], M('metal'), 1); box(scene, [2.2, 0, -1.7], [2.4, .74, -.7], M('metal'), 1);
+  openBook(scene, -.3, .8, -1.2, .8, .55, .08);
+  paper(scene, 1.1, -1.15, .42, .6, -.2, MX('paper', { key: 'lib1', title: 'PARECER', highlight: true })).position.y = .805;
+  paper(scene, 1.4, -1.3, .42, .6, .15, MX('paper', { key: 'lib2', title: 'CONTRATO SOCIAL' })).position.y = .802;
+  book(scene, -1.7, .8, -1.3, .32, .06, .45, 'CÓDIGO CIVIL', '#3b2a22', '', .3, 0).rotation.set(Math.PI / 2, 0, .3);
+  mesh(scene, new THREE.CylinderGeometry(.04, .05, .5, 16), MX('brushed'), [2, 1.05, -1.6]); mesh(scene, new THREE.ConeGeometry(.2, .18, 32, 1, true), MX('brushed', { color: 0x1d1d1c }), [2, 1.36, -1.6]);
+  const l = new THREE.PointLight(0xffcf96, 7, 5, 2); l.position.set(2, 1.25, -1.5); scene.add(l);
+}
+function codesCloseup(scene) {
+  setSeed(202);
+  box(scene, [-2, -.05, -1], [2, 0, .6], MX('walnut'), 1.4);
+  box(scene, [-2, -.05, -1.04], [2, 2, -1], MX('walnut'), 1.4);
+  const titles = [['CONSTITUIÇÃO FEDERAL', '#1f2a3a'], ['CÓDIGO CIVIL', '#3b2a22'], ['CÓDIGO DE PROCESSO CIVIL', '#4a1f1f'], ['CONSOLIDAÇÃO DAS LEIS DO TRABALHO', '#22302a'], ['CÓDIGO DE DEFESA DO CONSUMIDOR', '#2c2b28'], ['DIREITO DE FAMÍLIA', '#5a4632'], ['TEORIA DOS CONTRATOS', '#1c1d1f'], ['DIREITO EMPRESARIAL', '#3b2a22']];
+  let x = -.62; titles.forEach(([t, c], i) => { const w = [.075, .09, .085, .07, .065, .06, .07, .08][i]; const h = [.33, .36, .35, .32, .31, .3, .32, .34][i]; book(scene, x + w / 2, 0, -.7, w, h, .25, t, c, i === 1 ? 'I' : ''); x += w + .004; });
+  book(scene, x + .1, 0, -.72, .07, .3, .25, 'JURISPRUDÊNCIA', '#4a1f1f', '', 0, -.28);
+}
+function listening(scene) {
+  setSeed(203);
+  room(scene, { x0: -5, x1: 5, z0: -5, z1: 3, h: 3.1, floor: M('wood', { tone: .42, slat: false }), wall: M('plaster', { base: [86, 84, 78], key: 'lw2' }), ceil: M('plaster', { base: [170, 166, 158], key: 'lc3' }), mullion: 1.25, sideWall: MX('walnut') });
+  mesh(scene, new THREE.CylinderGeometry(.55, .55, .04, 48), MX('walnut'), [0, .72, -1.2]); mesh(scene, new THREE.CylinderGeometry(.05, .14, .72, 24), M('metal'), [0, .36, -1.2]);
+  const ch = MX('leather', { color: 0x2b221c });
+  for (const [x, r] of [[-1.15, Math.PI / 2 - .35], [1.15, -Math.PI / 2 + .35]]) {
+    const g = new THREE.Group(); g.position.set(x, 0, -1.2); g.rotation.y = r; scene.add(g);
+    const parts = [
+      [new THREE.BoxGeometry(.72, .14, .66), [0, .42, 0], [0, 0, 0]],
+      [new THREE.BoxGeometry(.72, .62, .12), [0, .78, -.3], [-.18, 0, 0]],
+      [new THREE.BoxGeometry(.1, .26, .66), [-.36, .6, 0], [0, 0, 0]],
+      [new THREE.BoxGeometry(.1, .26, .66), [.36, .6, 0], [0, 0, 0]],
+    ];
+    parts.forEach(([geo, p, rot]) => { const m = new THREE.Mesh(geo, ch); m.position.set(...p); m.rotation.set(...rot); m.castShadow = true; m.receiveShadow = true; g.add(m); });
+    for (const [lx, lz] of [[-.3, -.26], [.3, -.26], [-.3, .26], [.3, .26]]) { const leg = new THREE.Mesh(new THREE.CylinderGeometry(.018, .014, .35, 10), M('metal')); leg.position.set(lx, .175, lz); leg.castShadow = true; g.add(leg); }
+  }
+  paper(scene, -.15, -1.25, .3, .42, .3, MX('paper', { key: 'note', title: 'ANOTAÇÕES' })).position.y = .745;
+  mesh(scene, new THREE.CylinderGeometry(.008, .008, .3, 12), MX('brushed', { color: 0x1d1d1c }), [.18, .75, -1.1], [Math.PI / 2, 0, .8]);
+  mesh(scene, new THREE.CylinderGeometry(.045, .04, .1, 24), M('white', { color: 0xe8e2d6 }), [.25, .79, -1.45]);
+  for (let j = 0; j < 3; j++) { box(scene, [-4.98, .9 + j * .55, -4.6], [-4.7, .93 + j * .55, -1.8], MX('walnut'), 1); bookRow(scene, -4.95, -4.75, .93 + j * .55, -3.2, .26, .3, .2, 40 + j); }
+  plant(scene, 3.8, 0, -4, 1.6);
+  skyline(scene, 30);
+}
+function analysisDesk(scene) {
+  setSeed(204);
+  box(scene, [-3, -.1, -2], [3, 0, 2], MX('walnut'), 1.4, false);
+  openBook(scene, -.75, 0, -.35, 1.1, .78, -.08);
+  paper(scene, .75, .15, .7, 1, .18, MX('paper', { key: 'an1', title: 'PETIÇÃO INICIAL', highlight: true }));
+  paper(scene, .95, -.35, .7, 1, .32, MX('paper', { key: 'an2', title: 'MEMORIAL' })).position.y = .002;
+  mesh(scene, new THREE.CylinderGeometry(.018, .018, .32, 16), new THREE.MeshStandardMaterial({ color: '#e8cf3a', roughness: .5 }), [.35, .03, .65], [Math.PI / 2, 0, .9]);
+  mesh(scene, new THREE.CylinderGeometry(.012, .012, .7, 16), MX('brushed', { color: 0x1d1d1c }), [1.55, .02, .7], [Math.PI / 2, 0, -.4]);
+  for (let i = 0; i < 3; i++) box(scene, [-.2 + i * .05, .03, -.72], [-.17 + i * .05, .034, -.6], new THREE.MeshStandardMaterial({ color: ['#c9a85a', '#8aa0b0', '#b07a5a'][i] }), 1, false);
+  mesh(scene, new THREE.CylinderGeometry(.06, .06, .14, 24), M('white', { color: 0xe8e2d6 }), [-1.7, .07, .6]);
+}
+function scheduleDesk(scene) {
+  setSeed(205);
+  box(scene, [-3, -.1, -2], [3, 0, 2], MX('walnut'), 1.4, false);
+  const lap = new THREE.Group(); lap.position.set(-.5, 0, -.35); lap.rotation.y = .12; scene.add(lap);
+  const base = new THREE.Mesh(new THREE.BoxGeometry(1.1, .025, .75), MX('steel', { color: 0x8a8d8a })); base.position.y = .013; const scr = new THREE.Mesh(new THREE.BoxGeometry(1.1, .7, .02), MX('steel', { color: 0x8a8d8a })); scr.position.set(0, .36, -.38); scr.rotation.x = -.25;
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.02, .62), M('emissive', { color: 0x2b3438, i: .6 })); screen.position.set(0, .36, -.365); screen.rotation.x = -.25;
+  [base, scr, screen].forEach(m => { m.castShadow = true; m.receiveShadow = true; lap.add(m); });
+  box(scene, [.6, 0, -.1], [1.3, .05, .85], MX('leather', { color: 0x3a2b20 }), 1);
+  box(scene, [1.12, .05, -.1], [1.16, .052, .85], new THREE.MeshStandardMaterial({ color: '#c9a85a', roughness: .4, metalness: .6 }), 1, false);
+  folder(scene, -1.700, 0.450, 1.000, 0.700, -.1, 'ACOMPANHAMENTO');
+  box(scene, [1.6, 0, -.8], [1.8, .012, -.4], M('metal', { color: 0x1d1d1c }), 1);
+  mesh(scene, new THREE.CylinderGeometry(.06, .06, .14, 24), M('white', { color: 0xe8e2d6 }), [1.9, .07, .4]);
+}
+function realEstateDesk(scene) {
+  setSeed(206);
+  box(scene, [-3, -.1, -2], [3, 0, 2], MX('walnut'), 1.4, false);
+  paper(scene, -.3, -.1, 1, 1.4, .06, MX('paper', { key: 'imo', title: 'INSTRUMENTO DE COMPRA E VENDA', sign: true }));
+  const keyMat = MX('brushed');
+  const ring = mesh(scene, new THREE.TorusGeometry(.09, .012, 12, 40), keyMat, [.75, .012, .45], [Math.PI / 2, 0, 0]);
+  for (const [r, l] of [[.5, .32], [-.3, .28]]) { const g = new THREE.Group(); g.position.set(.75, .012, .45); g.rotation.y = r; scene.add(g); const head = new THREE.Mesh(new THREE.CylinderGeometry(.055, .055, .012, 32), keyMat); head.position.set(.15, 0, 0); const shaft = new THREE.Mesh(new THREE.BoxGeometry(l, .01, .03), keyMat); shaft.position.set(.15 + l / 2 + .04, 0, 0); [head, shaft].forEach(m => { m.castShadow = true; g.add(m); }); }
+  void ring;
+  folder(scene, -1.750, -0.775, 1.100, 0.850, .12, 'MATRÍCULA E CERTIDÕES');
+  mesh(scene, new THREE.CylinderGeometry(.012, .012, .7, 16), MX('brushed', { color: 0x1d1d1c }), [.4, .02, .95], [Math.PI / 2, 0, .9]);
+}
+function familyDesk(scene) {
+  setSeed(207);
+  box(scene, [-3, -.1, -2], [3, 0, 2], MX('walnut'), 1.4, false);
+  folder(scene, -0.450, -0.100, 1.300, 1.000, -.08, 'INVENTÁRIO E PARTILHA');
+  paper(scene, .9, -.1, .8, 1.1, .2, MX('paper', { key: 'fam', title: 'ESCRITURA PÚBLICA' }));
+  mesh(scene, new THREE.CylinderGeometry(.014, .014, .62, 16), MX('brushed'), [.3, .03, .75], [Math.PI / 2, 0, -.5]);
+  book(scene, -1.9, 0, .2, .3, .05, .44, 'SUCESSÕES', '#5a4632').rotation.set(Math.PI / 2, 0, .4);
+  mesh(scene, new THREE.CylinderGeometry(.06, .06, .14, 24), M('white', { color: 0xe8e2d6 }), [1.9, .07, -.9]);
+}
+function laborDesk(scene) {
+  setSeed(208);
+  box(scene, [-3, -.1, -2], [3, 0, 2], MX('walnut'), 1.4, false);
+  paper(scene, -.6, 0, .9, 1.25, -.1, MX('paper', { key: 'lab1', title: 'CONTRATO DE TRABALHO', sign: true }));
+  paper(scene, .6, -.2, .9, 1.25, .14, MX('paper', { key: 'lab2', title: 'TERMO DE RESCISÃO', highlight: true }));
+  box(scene, [1.4, 0, .5], [1.75, .03, .95], M('metal', { color: 0x2b2b29 }), 1);
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) box(scene, [1.44 + i * .075, .03, .62 + j * .075], [1.49 + i * .075, .04, .67 + j * .075], M('white', { color: 0xd8d4cc }), 1, false);
+  book(scene, -2, 0, -.6, .32, .07, .46, 'CONSOLIDAÇÃO DAS LEIS DO TRABALHO', '#22302a').rotation.set(Math.PI / 2, 0, .2);
+  mesh(scene, new THREE.CylinderGeometry(.012, .012, .7, 16), MX('brushed', { color: 0x1d1d1c }), [0, .02, .85], [Math.PI / 2, 0, 1.2]);
+}
+function reception(scene) {
+  setSeed(209);
+  box(scene, [-8, -.2, -6], [8, 0, 4], MX('nero', { rough: .2 }), 3);
+  box(scene, [-8, 3.4, -6], [8, 3.6, 4], M('plaster', { base: [60, 58, 54], key: 'rc' }), 3);
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(8, 2), new THREE.MeshStandardMaterial({ map: wallSignTex(), roughness: .6, metalness: .1 })); sign.position.set(0, 2.15, -5.98); scene.add(sign);
+  box(scene, [-8, 0, -6.2], [8, 3.4, -6], new THREE.MeshStandardMaterial({ color: '#1d211e', roughness: .7 }), 3);
+  box(scene, [-2.4, 0, -3.8], [2.4, 1.05, -3], MX('walnut'), 2); box(scene, [-2.45, 1.05, -3.85], [2.45, 1.09, -2.95], MX('nero', { key: 'top', base: [30, 31, 29], vein: [120, 116, 108], rough: .25 }), 2);
+  box(scene, [-7.9, 0, -5], [-7.6, 3.4, 3], MX('walnut'), 2);
+  for (const x of [-5.4, -4.4]) { const ch = MX('leather', { color: 0x2a211b }); box(scene, [x - .35, .42, 1], [x + .35, .5, 1.7], ch, 1); box(scene, [x - .35, .5, 1.62], [x + .35, 1.1, 1.72], ch, 1); }
+  plant(scene, 6.6, 0, -5, 2.2);
+  for (const x of [-3, 0, 3]) { const l = new THREE.PointLight(0xffd6a0, 10, 6, 2); l.position.set(x, 3, -5); scene.add(l); }
+}
+
+// ======================================================================
 const darkSky = () => skyTexture('#55606a', '#a9aaa2', '#c9c2b2');
 
 export const SCENES = {
+
+  'hero-biblioteca': { fov: 42, build(s, c) { legalLibrary(s); s.background = darkSky(); sunLight(s, [30, 9, 6], 0xffd9a8, 4.6, 10, [0, 0, -2]); s.add(new THREE.HemisphereLight(0xc8d0d4, 0x2a2622, .3)); look(c, [-3.4, 1.45, 1.6], [.8, 1.0, -3.6]); return { exposure: 1.2, envI: .4 }; } },
+  'codigos': { fov: 34, w: 1200, h: 1600, build(s, c) { codesCloseup(s); s.background = new THREE.Color(0x141513); sunLight(s, [3, 2.5, 4], 0xffe0b8, 3.4, 3, [0, .15, -.7]); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .25)); look(c, [-.12, .3, .62], [-.24, .17, -.7]); return { exposure: 1, envI: .3 }; } },
+  'escuta': { fov: 44, build(s, c) { listening(s); s.background = darkSky(); fogged(s, 0xb8b4a8, .004); sunLight(s, [16, 9, 30], 0xffd6a0, 4, 10); s.add(new THREE.HemisphereLight(0xd0d6d8, 0x2a2622, .35)); look(c, [-2.6, 1.5, -4.2], [.5, .8, -.4]); return { exposure: 1, envI: .4 }; } },
+  'analise': { fov: 32, build(s, c) { analysisDesk(s); s.background = new THREE.Color(0x141513); sunLight(s, [-6, 5, 2], 0xffe0b8, 3.4, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [.3, 3.6, 2.4], [0, 0, 0]); return { exposure: 1, envI: .3 }; } },
+  'acompanhamento': { fov: 32, build(s, c) { scheduleDesk(s); s.background = new THREE.Color(0x141513); sunLight(s, [5, 5, 3], 0xffe0b8, 3.2, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [-.2, 3.2, 2.8], [0, 0, 0]); return { exposure: 1, envI: .3 }; } },
+  'imobiliario': { fov: 32, build(s, c) { realEstateDesk(s); s.background = new THREE.Color(0x141513); sunLight(s, [-6, 5, 2], 0xffe0b8, 3.4, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [.5, 3.3, 2.5], [0, 0, 0]); return { exposure: 1, envI: .3 }; } },
+  'familia-docs': { fov: 32, build(s, c) { familyDesk(s); s.background = new THREE.Color(0x141513); sunLight(s, [6, 4, 2], 0xffd0a0, 3.2, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [-.3, 3.3, 2.5], [0, 0, 0]); return { exposure: 1, envI: .3 }; } },
+  'trabalhista': { fov: 32, build(s, c) { laborDesk(s); s.background = new THREE.Color(0x141513); sunLight(s, [-6, 5, 2], 0xffe0b8, 3.4, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [.2, 3.4, 2.5], [0, 0, 0]); return { exposure: 1, envI: .3 }; } },
+  'recepcao': { fov: 44, build(s, c) { reception(s); s.background = new THREE.Color(0x101110); s.add(new THREE.HemisphereLight(0xd0d6d8, 0x2a2622, .4)); sunLight(s, [10, 8, 12], 0xffe0b8, 1.4, 10); look(c, [3.2, 1.6, 3.6], [-.4, 1.7, -6]); return { exposure: 1.05, envI: .4 }; } },
   'hero-lobby': { fov: 40, build(s, c) { lobby(s); s.background = darkSky(); fogged(s, 0xb8b4a8, .004); sunLight(s, [26, 14, 40], 0xffd9a8, 5.2, 30); s.add(new THREE.HemisphereLight(0xc8d0d4, 0x2a2622, .25)); look(c, [-13, 1.3, -12], [3, 3.2, 4]); return { exposure: 1.05, envI: .4 }; } },
   'reuniao': { fov: 46, build(s, c) { meeting(s); s.background = darkSky(); fogged(s, 0xb8b4a8, .004); sunLight(s, [-20, 12, 30], 0xffdcb0, 3.6, 12); s.add(new THREE.HemisphereLight(0xd0d6d8, 0x3a3228, .45)); look(c, [6, 1.8, -5.2], [-2, .9, 0]); return { exposure: .95, envI: .45 }; } },
   'mesa-documentos': { fov: 32, build(s, c) { desk(s); s.background = new THREE.Color(0x141513); sunLight(s, [-6, 5, 2], 0xffe0b8, 3.4, 4); s.add(new THREE.HemisphereLight(0xcfd6d8, 0x1a1612, .3)); look(c, [.6, 3.4, 2.6], [-.1, 0, -.1]); return { exposure: .95, envI: .3 }; } },

@@ -26,7 +26,7 @@ export default function ContactPage() {
   const navigate = useNavigate();
   return (
     <main id="principal" tabIndex={-1} className="outline-none">
-      <PageHero image="fachada" alt="Fachada de edifício corporativo em pedra e vidro." eyebrow="Contato" title={'Informações\nde contato.'} back={{ to: '/', label: 'Início' }} />
+      <PageHero image="recepcao" alt="Recepção do escritório com a marca Almeida Advocacia na parede e balcão de madeira." eyebrow="Contato" title={'Informações\nde contato.'} back={{ to: '/', label: 'Início' }} />
       <section data-tone="dark" className="grain relative bg-graphite py-[clamp(80px,12vh,150px)] text-paper">
         <div className="px-site grid grid-cols-12 gap-x-6 gap-y-14">
           <dl className="col-span-12 grid content-start gap-6 md:col-span-4">

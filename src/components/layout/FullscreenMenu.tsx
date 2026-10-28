@@ -7,8 +7,8 @@ import { useReducedMotion } from '../../hooks/useMedia';
 import { Img } from '../ui/Img';
 
 const previews: Record<string, string> = {
-  inicio: 'hero-lobby', manifesto: 'pedra-latao', areas: 'biblioteca', filosofia: 'escada',
-  equipe: 'escritorio', conteudo: 'mesa-documentos', atendimento: 'reuniao', contato: 'fachada',
+  inicio: 'hero-biblioteca', manifesto: 'codigos', areas: 'biblioteca', filosofia: 'escuta',
+  equipe: 'escritorio', conteudo: 'analise', atendimento: 'reuniao', contato: 'recepcao',
 };
 
 /** Menu fullscreen com entradas em stagger, números de seção e gestão de foco. */

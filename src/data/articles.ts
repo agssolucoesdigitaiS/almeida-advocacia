@@ -48,7 +48,7 @@ export const articles: Article[] = [
     title: 'Inventário extrajudicial: aspectos importantes.',
     category: 'Família e Sucessões',
     date: '2026-08-27',
-    image: { name: 'mesa-documentos', alt: 'Documentos e pasta de couro sobre mesa de madeira escura.' },
+    image: { name: 'familia-docs', alt: 'Pasta de inventário e partilha ao lado de uma escritura pública.' },
     excerpt: 'Quando o inventário pode ser feito em cartório, quais são os requisitos e por que os prazos importam.',
     body: [
       { type: 'p', text: 'Com o falecimento de uma pessoa, seus bens, direitos e dívidas precisam ser apurados e partilhados entre os herdeiros. Esse procedimento é o inventário. Desde a Lei nº 11.441/2007, ele pode, em determinadas situações, ser realizado por escritura pública em cartório de notas, sem a necessidade de processo judicial.' },
@@ -79,7 +79,7 @@ export const articles: Article[] = [
     title: 'Responsabilidade civil: conceitos e aplicações.',
     category: 'Direito Civil',
     date: '2026-07-30',
-    image: { name: 'biblioteca', alt: 'Biblioteca com estantes de madeira e luminária acesa.' },
+    image: { name: 'analise', alt: 'Código aberto e petição com trechos destacados.' },
     excerpt: 'Conduta, dano e nexo causal: os elementos que estruturam o dever de reparar e as principais distinções da matéria.',
     body: [
       { type: 'p', text: 'Responsabilidade civil é o dever de reparar um dano causado a outra pessoa. O Código Civil estabelece que quem, por ação ou omissão voluntária, negligência ou imprudência, viola direito e causa dano a outrem comete ato ilícito (artigo 186) e fica obrigado a repará-lo (artigo 927).' },

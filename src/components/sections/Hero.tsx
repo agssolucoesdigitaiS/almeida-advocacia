@@ -6,7 +6,7 @@ import { Img } from '../ui/Img';
 import { Magnetic } from '../motion/Magnetic';
 import { site } from '../../data/site';
 
-export const HERO_IMAGE = 'hero-lobby';
+export const HERO_IMAGE = 'hero-biblioteca';
 const WORDS = ['Conhecimento.', 'Estratégia.', 'Compromisso.'];
 
 export function Hero() {
@@ -48,7 +48,7 @@ export function Hero() {
       <div data-h-media className="absolute inset-0" style={{ clipPath: 'inset(0% 0% 0% 0%)' }}>
         <div data-h-img className="absolute inset-0">
           <div data-h-scale className="absolute inset-0">
-            <Img name={HERO_IMAGE} alt="Render demonstrativo de saguão corporativo em pedra escura, com grande fachada envidraçada e faixas de luz natural sobre o piso." reveal="none" priority className="h-full w-full" imgClassName="object-[60%_50%]" />
+            <Img name={HERO_IMAGE} alt="Imagem ilustrativa de biblioteca jurídica: estantes com códigos e obras de doutrina, mesa de trabalho com documentos e luminária acesa." reveal="none" priority className="h-full w-full" imgClassName="object-[35%_50%]" />
           </div>
         </div>
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,19,17,.86)_0%,rgba(16,19,17,.45)_55%,rgba(16,19,17,.2)_100%)]" />

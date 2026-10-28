@@ -1,9 +1,9 @@
 // Conteúdo editorial: filosofia, equipe ilustrativa, atendimento e cena 3D.
 
 export const pillars = [
-  { index: '01', title: 'Escuta', text: 'Compreender os fatos, as expectativas e as particularidades de cada situação.', image: { name: 'escada', alt: 'Escada monumental de pedra escura iluminada por luz zenital.' } },
-  { index: '02', title: 'Análise', text: 'Examinar fundamentos jurídicos, documentos, riscos e alternativas disponíveis.', image: { name: 'pedra-latao', alt: 'Parede de pedra escura com filete vertical de latão.' } },
-  { index: '03', title: 'Acompanhamento', text: 'Manter comunicação objetiva e atenção aos desdobramentos de cada demanda.', image: { name: 'escritorio', alt: 'Sala de trabalho com mesa de madeira e janela para a cidade.' } },
+  { index: '01', title: 'Escuta', text: 'Compreender os fatos, as expectativas e as particularidades de cada situação.', image: { name: 'escuta', alt: 'Sala de atendimento com duas poltronas frente a frente e uma mesa com bloco de anotações.' } },
+  { index: '02', title: 'Análise', text: 'Examinar fundamentos jurídicos, documentos, riscos e alternativas disponíveis.', image: { name: 'analise', alt: 'Código aberto, petição com trechos destacados e marcadores sobre a mesa de trabalho.' } },
+  { index: '03', title: 'Acompanhamento', text: 'Manter comunicação objetiva e atenção aos desdobramentos de cada demanda.', image: { name: 'acompanhamento', alt: 'Mesa com notebook, agenda e pasta de acompanhamento de processos.' } },
 ];
 
 /**

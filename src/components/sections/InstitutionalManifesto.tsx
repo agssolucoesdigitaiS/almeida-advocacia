@@ -45,8 +45,8 @@ export function InstitutionalManifesto() {
           </dl>
         </Reveal>
         <figure className="col-span-10 col-start-3 md:col-span-4 md:col-start-8">
-          <Img name="pedra-latao" alt="Parede de pedra escura com veios claros e um filete vertical de latão iluminado lateralmente." className="aspect-[3/4] w-full" parallax={10} sizes="(min-width: 768px) 33vw, 80vw" />
-          <figcaption className="label mt-4 flex justify-between text-mineral"><span>Fig. 01</span><span>Pedra e latão</span></figcaption>
+          <Img name="codigos" alt="Volumes de legislação na estante: Código Civil, Código de Processo Civil, CLT, Código de Defesa do Consumidor e obras de doutrina." className="aspect-[3/4] w-full" parallax={10} sizes="(min-width: 768px) 33vw, 80vw" />
+          <figcaption className="label mt-4 flex justify-between text-mineral"><span>Acervo</span><span>Legislação e doutrina</span></figcaption>
         </figure>
       </div>
     </section>

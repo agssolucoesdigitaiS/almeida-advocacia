@@ -18,7 +18,7 @@ export const areas: Area[] = [
     index: '01',
     title: 'Direito Civil',
     short: 'Análise e condução de questões relativas a obrigações, responsabilidade civil, contratos e relações patrimoniais.',
-    image: { name: 'biblioteca', alt: 'Biblioteca jurídica com estantes de madeira escura e mesa de leitura iluminada.' },
+    image: { name: 'biblioteca', alt: 'Biblioteca jurídica com estantes de legislação e mesa de leitura iluminada.' },
     overview: [
       'O Direito Civil organiza as relações entre particulares: o cumprimento de obrigações, a reparação de danos, a propriedade, os contratos e o patrimônio. É o ramo que mais aparece no cotidiano de pessoas e empresas, muitas vezes antes mesmo de existir um conflito.',
       'A atuação pode ser consultiva, para orientar uma decisão ou estruturar um negócio, ou contenciosa, quando é necessário levar a questão ao Judiciário ou a métodos adequados de solução de conflitos.',
@@ -36,7 +36,7 @@ export const areas: Area[] = [
     index: '02',
     title: 'Família e Sucessões',
     short: 'Orientação jurídica sobre divórcio, guarda, alimentos, inventários, partilhas e planejamento sucessório.',
-    image: { name: 'familia', alt: 'Sala de estar com luz de fim de tarde, sofá em linho e luminária acesa.' },
+    image: { name: 'familia-docs', alt: 'Pasta de documentos identificada como inventário e partilha, ao lado de uma escritura pública.' },
     overview: [
       'Questões de família e de sucessões envolvem patrimônio, mas também vínculos e decisões pessoais. Por isso, pedem atenção ao contexto de cada pessoa e, sempre que possível, a busca por soluções consensuais.',
       'Muitos procedimentos podem ser realizados em cartório, quando há consenso e os requisitos legais estão presentes. Outros dependem do Judiciário. A escolha do caminho é feita a partir da análise do caso.',
@@ -54,7 +54,7 @@ export const areas: Area[] = [
     index: '03',
     title: 'Direito Empresarial',
     short: 'Assessoria jurídica para sociedades empresárias, relações comerciais, governança e organização contratual.',
-    image: { name: 'fachada', alt: 'Fachada de edifício corporativo em pedra e vidro vista de baixo ao entardecer.' },
+    image: { name: 'reuniao', alt: 'Sala de reuniões com mesa longa de madeira e cadeiras de couro.' },
     overview: [
       'A assessoria empresarial acompanha a empresa em suas decisões estruturais: constituição, organização societária, relação entre sócios, contratos com fornecedores e clientes e prevenção de conflitos.',
       'O trabalho tende a ser contínuo e preventivo, com foco em documentar acordos, reduzir incertezas e apoiar a tomada de decisão dos gestores.',
@@ -72,7 +72,7 @@ export const areas: Area[] = [
     index: '04',
     title: 'Direito Imobiliário',
     short: 'Atuação em contratos imobiliários, locações, regularização documental e conflitos relacionados à propriedade e à posse.',
-    image: { name: 'residencial', alt: 'Edifício residencial contemporâneo com varandas e árvores na calçada.' },
+    image: { name: 'imobiliario', alt: 'Instrumento de compra e venda sobre a mesa, com chaves e pasta de matrícula e certidões.' },
     overview: [
       'Negócios imobiliários costumam envolver valores relevantes e documentação extensa. A análise prévia da matrícula, das certidões e das condições do contrato ajuda a identificar riscos antes da assinatura.',
       'Também fazem parte da área as relações de locação, a regularização de imóveis e os conflitos sobre propriedade, posse e condomínio.',
@@ -90,7 +90,7 @@ export const areas: Area[] = [
     index: '05',
     title: 'Direito Trabalhista',
     short: 'Orientação e representação em relações de trabalho, análise de obrigações legais e conflitos trabalhistas.',
-    image: { name: 'trabalho', alt: 'Escritório amplo com estações de trabalho organizadas e janelas para a cidade.' },
+    image: { name: 'trabalhista', alt: 'Contrato de trabalho e termo de rescisão sobre a mesa, com calculadora e a CLT.' },
     overview: [
       'As relações de trabalho são reguladas pela CLT, por normas complementares e por instrumentos coletivos. Compreender essas regras ajuda tanto quem contrata quanto quem presta serviços a conhecer seus direitos e obrigações.',
       'A atuação pode envolver orientação preventiva, análise de documentos e rotinas, negociação e representação em processos trabalhistas.',

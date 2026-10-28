@@ -254,13 +254,13 @@ export function brushedTex() {
     return { map: tex(c), rough: tex(c, false) };
   });
 }
-export function paperTextTex(key = 'paper', sign = false) {
+export function paperTextTex(key = 'paper', sign = false, title = 'CONTRATO DE PRESTAÇÃO DE SERVIÇOS', highlight = false) {
   return once('ptext' + key, () => {
     const W = 1024, H = 1448; const c = cnv(W, H); const ctx = c.getContext('2d');
     ctx.fillStyle = '#f3f0e8'; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#2a2a28'; ctx.font = 'bold 30px Georgia'; ctx.fillText('CONTRATO DE PRESTAÇÃO DE SERVIÇOS', 120, 170);
-    ctx.fillStyle = 'rgba(40,40,38,.75)';
-    let y = 250; for (let p = 0; p < 7; p++) { const lines = 4 + Math.floor(rnd() * 4); for (let l = 0; l < lines; l++) { const w = l === lines - 1 ? rr(200, 600) : rr(740, 790); ctx.fillRect(120, y, w, 7); y += 22; } y += 26; if (y > H - 300) break; }
+    ctx.fillStyle = '#2a2a28'; ctx.font = 'bold 30px Georgia'; ctx.textAlign = 'center'; ctx.fillText(title, W / 2, 170); ctx.textAlign = 'left';
+    ctx.font = '22px Georgia'; ctx.fillText('CLÁUSULA PRIMEIRA — DO OBJETO', 120, 240);
+    let y = 280; for (let p = 0; p < 7; p++) { const lines = 4 + Math.floor(rnd() * 4); for (let l = 0; l < lines; l++) { const w = l === lines - 1 ? rr(200, 600) : rr(740, 790); if (highlight && p === 2 && l < 3) { ctx.fillStyle = 'rgba(240,215,80,.55)'; ctx.fillRect(114, y - 8, w + 12, 20); } ctx.fillStyle = 'rgba(40,40,38,.75)'; ctx.fillRect(120, y, w, 7); y += 22; } y += 26; if (p === 3) { ctx.fillStyle = '#2a2a28'; ctx.font = '22px Georgia'; ctx.fillText('CLÁUSULA SEGUNDA — DAS OBRIGAÇÕES', 120, y + 10); y += 50; } if (y > H - 300) break; }
     if (sign) { ctx.fillRect(120, H - 200, 320, 2); ctx.fillRect(580, H - 200, 320, 2); ctx.strokeStyle = '#1f2a44'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(140, H - 210); for (let i = 0; i < 12; i++) ctx.quadraticCurveTo(160 + i * 22, H - 250 + (i % 2) * 50, 170 + i * 22, H - 214); ctx.stroke(); }
     return { map: tex(c) };
   });
@@ -279,7 +279,7 @@ export function MX(kind, o = {}) {
     case 'nero': return std({ map: darkStoneTex(o.key || 'nero', o.base, o.vein).map, roughness: o.rough ?? .25, metalness: .05, envMapIntensity: 1.2 });
     case 'brushed': { const t = brushedTex(); return std({ map: t.map, roughness: .32, metalness: .9, color: o.color || 0xd8c49a }); }
     case 'steel': { const t = brushedTex(); return std({ map: t.map, roughness: .38, metalness: .85, color: o.color || 0xb9bcb8 }); }
-    case 'paper': return std({ map: paperTextTex(o.key, o.sign).map, roughness: .9 });
+    case 'paper': return std({ map: paperTextTex(o.key, o.sign, o.title, o.highlight).map, roughness: .9 });
     case 'books': return std({ map: booksTex().map, roughness: .85 });
     case 'leather': return std({ color: o.color || 0x3a2b20, roughness: .55 });
     case 'walnut': return M('wood', { tone: .55, slat: false });
@@ -297,4 +297,61 @@ export function figure(scene, x, z, rotY = 0, s = 1, mat = null, pose = 'stand')
   add(new THREE.CylinderGeometry(.05, .06, .1, 12), [0, 1.53, 0]);
   add(new THREE.SphereGeometry(.105, 24, 16), [0, 1.66, 0]).scale.set(.9, 1.12, 1);
   return g;
+}
+
+
+// ---------- objetos jurídicos (sem clichês: livros de legislação, documentos, pastas) ----------
+const BOOK_COLORS = ['#3b2a22', '#1f2a3a', '#4a1f1f', '#22302a', '#2c2b28', '#5a4632', '#1c1d1f'];
+export function spineTex(title, color, vol = '') {
+  return once('spine' + title + color + vol, () => {
+    const W = 128, H = 640; const c = cnv(W, H); const ctx = c.getContext('2d');
+    ctx.fillStyle = color; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(.2, 'rgba(255,255,255,.06)'); g.addColorStop(.8, 'rgba(0,0,0,.05)'); g.addColorStop(1, 'rgba(0,0,0,.4)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#c9ad6e'; ctx.fillRect(10, 60, W - 20, 3); ctx.fillRect(10, 68, W - 20, 1.5); ctx.fillRect(10, H - 90, W - 20, 3); ctx.fillRect(10, H - 82, W - 20, 1.5);
+    ctx.save(); ctx.translate(W / 2 + 12, H / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.font = '600 34px Georgia'; ctx.fillStyle = '#d9bf84';
+    let size = 34; while (ctx.measureText(title).width > H - 200 && size > 18) { size -= 2; ctx.font = `600 ${size}px Georgia`; } ctx.fillText(title, 0, 0); ctx.restore();
+    if (vol) { ctx.textAlign = 'center'; ctx.font = '600 26px Georgia'; ctx.fillStyle = '#d9bf84'; ctx.fillText(vol, W / 2, H - 40); }
+    return tex(c);
+  });
+}
+function pagesTex() {
+  return once('pages', () => { const c = cnv(64, 256); pixelFill(c, (x, y) => { const v = 225 + (y % 3 === 0 ? -18 : 0) + (rnd() - .5) * 8; return [v, v * .97, v * .9]; }); return tex(c); });
+}
+export function book(scene, x, y, z, w, h, d, title, color, vol = '', rotY = 0, lean = 0) {
+  const cover = new THREE.MeshStandardMaterial({ color, roughness: .6 });
+  const spine = new THREE.MeshStandardMaterial({ map: spineTex(title, color, vol), roughness: .55 });
+  const pages = new THREE.MeshStandardMaterial({ map: pagesTex(), roughness: .95 });
+  // ordem BoxGeometry: +x, -x, +y, -y, +z, -z  → lombada voltada para +z
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), [cover, cover, pages, pages, spine, pages]);
+  m.position.set(x, y + h / 2, z); m.rotation.set(0, rotY, lean); m.castShadow = true; m.receiveShadow = true; scene.add(m); return m;
+}
+const LEGAL_TITLES = ['CÓDIGO CIVIL', 'CÓDIGO DE PROCESSO CIVIL', 'CONSTITUIÇÃO FEDERAL', 'CONSOLIDAÇÃO DAS LEIS DO TRABALHO', 'CÓDIGO DE DEFESA DO CONSUMIDOR', 'DIREITO DE FAMÍLIA', 'SUCESSÕES', 'DIREITO EMPRESARIAL', 'TEORIA DOS CONTRATOS', 'RESPONSABILIDADE CIVIL', 'DIREITO IMOBILIÁRIO', 'JURISPRUDÊNCIA', 'DIREITO DAS OBRIGAÇÕES', 'PROCESSO DO TRABALHO', 'DIREITOS REAIS', 'LEGISLAÇÃO COMPLEMENTAR'];
+export function bookRow(scene, x0, x1, y, z, hMin = .26, hMax = .34, depth = .24, seed = 1) {
+  setSeed(seed); let x = x0; let i = 0;
+  while (x < x1) {
+    const w = rr(.035, .07), h = rr(hMin, hMax); const t = LEGAL_TITLES[Math.floor(rnd() * LEGAL_TITLES.length)];
+    const col = BOOK_COLORS[Math.floor(rnd() * BOOK_COLORS.length)]; const vol = rnd() > .6 ? ['I', 'II', 'III', 'IV'][i % 4] : '';
+    book(scene, x + w / 2, y, z, w, h, depth, t, col, vol); x += w + .002; i++;
+    if (rnd() > .93) x += rr(.05, .15);
+  }
+}
+export function openBook(scene, x, y, z, w = .7, d = .5, rotY = 0) {
+  const g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = rotY; scene.add(g);
+  const pg = (key) => { const c = cnv(512, 720); const ctx = c.getContext('2d'); ctx.fillStyle = '#efe9dc'; ctx.fillRect(0, 0, 512, 720); ctx.fillStyle = 'rgba(40,38,34,.8)'; ctx.font = 'bold 20px Georgia'; ctx.fillText(key === 'l' ? 'Art. 421.' : 'Art. 422.', 50, 80); for (let yy = 110; yy < 660; yy += 18) ctx.fillRect(50, yy, rr(330, 410), 5); return tex(c); };
+  for (const [s, k] of [[-1, 'l'], [1, 'r']]) { const geo = new THREE.PlaneGeometry(w / 2, d, 8, 1); const p = geo.attributes.position; for (let i = 0; i < p.count; i++) { const xx = p.getX(i) + w / 4; p.setZ(i, Math.sin((xx / (w / 2)) * Math.PI) * .02); } geo.computeVertexNormals(); geo.rotateX(-Math.PI / 2); const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: pg(k), roughness: .9, side: THREE.DoubleSide })); m.position.set(s * w / 4, .03, 0); if (s < 0) m.scale.x = -1, m.material.map.repeat.x = -1, m.material.map.wrapS = THREE.RepeatWrapping, m.material.map.offset.x = 1; m.receiveShadow = true; g.add(m); }
+  const base = new THREE.Mesh(new THREE.BoxGeometry(w + .02, .03, d + .02), new THREE.MeshStandardMaterial({ color: '#3b2a22', roughness: .6 })); base.position.y = .012; base.castShadow = true; base.receiveShadow = true; g.add(base);
+  return g;
+}
+export function folderTex(label) {
+  return once('folder' + label, () => { const c = cnv(512, 360); const ctx = c.getContext('2d'); ctx.fillStyle = '#3a2d22'; ctx.fillRect(0, 0, 512, 360); ctx.font = '600 22px Georgia'; const tw = ctx.measureText(label).width; ctx.fillStyle = '#efe9dc'; ctx.fillRect(256 - tw / 2 - 26, 130, tw + 52, 70); ctx.fillStyle = '#2a2a28'; ctx.textAlign = 'center'; ctx.fillText(label, 256, 173); return tex(c); });
+}
+export function wallSignTex() {
+  return once('wallsign', () => {
+    const W = 2048, H = 512; const c = cnv(W, H); const ctx = c.getContext('2d'); ctx.fillStyle = '#1d211e'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#d4bb84'; ctx.lineWidth = 7; ctx.lineCap = 'square';
+    const mx = W / 2 - 110, my = 120; const A = (ox) => { ctx.beginPath(); ctx.moveTo(ox, my + 200); ctx.lineTo(ox + 70, my); ctx.lineTo(ox + 140, my + 200); ctx.stroke(); };
+    A(mx); A(mx + 90); ctx.beginPath(); ctx.moveTo(mx + 30, my + 140); ctx.lineTo(mx + 200, my + 140); ctx.stroke();
+    ctx.fillStyle = '#e8dfca'; ctx.font = '300 64px Georgia'; ctx.textAlign = 'center'; ctx.fillText('A L M E I D A   A D V O C A C I A', W / 2, my + 300);
+    return tex(c);
+  });
 }

@@ -32,8 +32,8 @@ export function About() {
           <path data-connect d="M 44 30 C 58 30, 52 70, 66 74" pathLength={1} strokeDasharray="1" fill="none" stroke="var(--c-gold)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         </svg>
         <figure className="relative col-span-12 md:col-span-6">
-          <Img name="escritorio" alt="Ambiente demonstrativo de escritório: mesa de madeira, cadeira de couro, estante com livros e janela para a cidade." className="aspect-[4/3] w-full" parallax={6} sizes="(min-width: 768px) 50vw, 100vw" />
-          <figcaption className="label mt-4 flex justify-between text-mineral"><span>Fig. 02</span><span>Ambiente de trabalho · render ilustrativo</span></figcaption>
+          <Img name="escritorio" alt="Sala de trabalho de advogado: mesa de madeira, cadeira de couro, estante com livros jurídicos e janela para a cidade." className="aspect-[4/3] w-full" parallax={6} sizes="(min-width: 768px) 50vw, 100vw" />
+          <figcaption className="label mt-4 flex justify-between text-mineral"><span>Sala de trabalho</span><span>Imagem ilustrativa</span></figcaption>
         </figure>
         <Reveal className="relative col-span-12 grid content-start gap-6 md:col-span-4 md:col-start-8 md:pt-6">
           <p data-reveal className="lead text-ink/85">
@@ -44,8 +44,8 @@ export function About() {
           </p>
         </Reveal>
         <figure className="relative col-span-10 col-start-3 md:col-span-4 md:col-start-8 md:mt-[6vh]">
-          <Img name="mesa-documentos" alt="Mesa de trabalho com documentos, caneta e pasta de couro." className="aspect-[4/3] w-full" parallax={12} reveal="clip-side" sizes="(min-width: 768px) 33vw, 80vw" />
-          <figcaption className="label mt-4 text-mineral">Fig. 03 · Documentação e análise</figcaption>
+          <Img name="mesa-documentos" alt="Contratos sobre a mesa de trabalho, com caneta e pasta de couro." className="aspect-[4/3] w-full" parallax={12} reveal="clip-side" sizes="(min-width: 768px) 33vw, 80vw" />
+          <figcaption className="label mt-4 text-mineral">Análise de documentos</figcaption>
         </figure>
       </div>
     </section>

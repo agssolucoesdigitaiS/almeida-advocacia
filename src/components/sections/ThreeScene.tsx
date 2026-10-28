@@ -68,9 +68,9 @@ export function ThreeScene() {
   return (
     <section ref={ref} id="experiencia" tabIndex={-1} data-tone="dark" className="relative bg-ink text-paper outline-none" aria-labelledby="exp-title">
       <div className="px-site grid grid-cols-12 gap-x-6 gap-y-6 pb-10 pt-[clamp(100px,14vh,180px)]">
-        <p className="label col-span-12 flex gap-4 text-gold md:col-span-2"><span className="num">04</span> Composição</p>
-        <h2 id="exp-title" className="display h-md col-span-12 max-w-[22ch] md:col-span-6">Equilíbrio, estrutura e ordem, em uma forma.</h2>
-        <p className="col-span-12 self-end text-sm text-paper/60 md:col-span-4">Escultura digital abstrata. Role para ver as peças se reorganizarem.</p>
+        <p className="label col-span-12 flex gap-4 text-gold md:col-span-2"><span className="num">04</span> Princípios</p>
+        <h2 id="exp-title" className="display h-md col-span-12 max-w-[24ch] md:col-span-6">Fatos, normas e alternativas, em equilíbrio.</h2>
+        <p className="col-span-12 self-end text-sm text-paper/60 md:col-span-4">Representação abstrata do trabalho jurídico: elementos dispersos que, com análise, se organizam até sustentar uma decisão fundamentada. Role para acompanhar.</p>
       </div>
 
       {interactive ? (
@@ -97,10 +97,10 @@ export function ThreeScene() {
         </div>
       ) : (
         <div className="px-site grid grid-cols-12 gap-6 pb-[clamp(96px,14vh,180px)]">
-          <Img name={SCULPTURE_FALLBACK} alt="Composição escultórica abstrata: monólito de bronze escovado, blocos de pedra escura e uma viga de aço em equilíbrio sobre um plinto." className="col-span-12 aspect-[16/9] w-full lg:col-span-8" sizes="(min-width: 1024px) 66vw, 100vw" />
+          <Img name={SCULPTURE_FALLBACK} alt="Representação abstrata de equilíbrio: peças de bronze, pedra e aço organizadas sobre uma base, como fatos e normas sustentando uma decisão." className="col-span-12 aspect-[16/9] w-full lg:col-span-8" sizes="(min-width: 1024px) 66vw, 100vw" />
           <ul className="col-span-12 grid content-end gap-2 lg:col-span-4">
             {sculptureWords.map((w) => <li key={w} className="display break-words border-t border-paper/15 pt-3 text-[clamp(1.7rem,2.6vw,2.8rem)] uppercase leading-none">{w}</li>)}
-            {cap && !cap.webgl && <li className="mt-3 text-xs text-paper/50">Seu navegador não oferece WebGL; exibimos uma imagem da composição.</li>}
+            {cap && !cap.webgl && <li className="mt-3 text-xs text-paper/50">Seu navegador não oferece WebGL; exibimos uma imagem estática.</li>}
           </ul>
         </div>
       )}

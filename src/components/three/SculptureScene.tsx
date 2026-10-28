@@ -4,8 +4,8 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 /*
- * Composição escultórica abstrata: plinto de pedra, monólito de bronze escovado,
- * blocos escuros, uma viga de aço em equilíbrio e uma esfera.
+ * Representação abstrata do trabalho jurídico: base de pedra, painel de bronze,
+ * dois volumes encadernados (as normas), uma viga de aço em equilíbrio e uma esfera (a decisão).
  * O scroll (0–1) reorganiza as peças: dispersão → estrutura → precisão.
  * Orçamento: < 20 malhas, sem texturas externas, DPR ≤ 1.5, uma sombra 1024².
  */
@@ -52,7 +52,20 @@ function Sculpture({ progress, lite }: { progress: MutableRefObject<number>; lit
   const steel = useMemo(() => new THREE.MeshStandardMaterial({ color: '#c4c6c2', metalness: 0.95, roughness: 0.28, roughnessMap: rough }), [rough]);
   const stone = useMemo(() => new THREE.MeshStandardMaterial({ color: '#1f2320', metalness: 0.1, roughness: 0.55 }), []);
   const stone2 = useMemo(() => new THREE.MeshStandardMaterial({ color: '#2f3430', metalness: 0.08, roughness: 0.7 }), []);
-  useEffect(() => () => { [bronze, steel, stone, stone2].forEach((m) => m.dispose()); rough.dispose(); }, [bronze, steel, stone, stone2, rough]);
+  // volumes encadernados: capas em couro, cortes das páginas em tom papel, lombada com filetes dourados
+  const pagesMat = useMemo(() => {
+    const c = document.createElement('canvas'); c.width = 64; c.height = 256; const ctx = c.getContext('2d')!;
+    ctx.fillStyle = '#e6dcc6'; ctx.fillRect(0, 0, 64, 256); for (let y = 0; y < 256; y += 3) { ctx.fillStyle = `rgba(120,100,70,${0.08 + Math.random() * 0.1})`; ctx.fillRect(0, y, 64, 1); }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 });
+  }, []);
+  const spineMat = (color: string) => {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 128; const ctx = c.getContext('2d')!;
+    ctx.fillStyle = color; ctx.fillRect(0, 0, 512, 128); ctx.fillStyle = '#c9ad6e'; for (const x of [60, 70, 440, 450]) ctx.fillRect(x, 10, 3, 108);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.5 });
+  };
+  const bookA = useMemo(() => { const cover = new THREE.MeshStandardMaterial({ color: '#4a1f1f', roughness: 0.5 }); return [pagesMat, pagesMat, cover, cover, spineMat('#4a1f1f'), pagesMat]; }, [pagesMat]); // eslint-disable-line react-hooks/exhaustive-deps
+  const bookB = useMemo(() => { const cover = new THREE.MeshStandardMaterial({ color: '#1f2a3a', roughness: 0.5 }); return [pagesMat, pagesMat, cover, cover, spineMat('#1f2a3a'), pagesMat]; }, [pagesMat]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => { [bronze, steel, stone, stone2, pagesMat, ...bookA, ...bookB].forEach((m) => m.dispose()); rough.dispose(); }, [bronze, steel, stone, stone2, pagesMat, bookA, bookB, rough]);
 
   const tmpP = useMemo(() => new THREE.Vector3(), []);
   useFrame((state, dt) => {
@@ -79,8 +92,8 @@ function Sculpture({ progress, lite }: { progress: MutableRefObject<number>; lit
     <group ref={group}>
       <mesh position={[0, 0.2, 0]} receiveShadow castShadow={shadow} material={stone}><boxGeometry args={[8.4, 0.4, 3.6]} /></mesh>
       <mesh ref={set('monolith')} castShadow={shadow} receiveShadow material={bronze}><boxGeometry args={[0.14, 4.4, 2.2]} /></mesh>
-      <mesh ref={set('blockA')} castShadow={shadow} receiveShadow material={stone2}><boxGeometry args={[2.4, 1.1, 1.6]} /></mesh>
-      <mesh ref={set('blockB')} castShadow={shadow} receiveShadow material={stone}><boxGeometry args={[1.6, 0.7, 1.2]} /></mesh>
+      <mesh ref={set('blockA')} castShadow={shadow} receiveShadow material={bookA}><boxGeometry args={[2.4, 1.1, 1.6]} /></mesh>
+      <mesh ref={set('blockB')} castShadow={shadow} receiveShadow material={bookB}><boxGeometry args={[1.6, 0.7, 1.2]} /></mesh>
       <mesh ref={set('beam')} castShadow={shadow} receiveShadow material={steel}><boxGeometry args={[6.4, 0.06, 0.14]} /></mesh>
       <mesh ref={set('sphere')} castShadow={shadow} material={bronze}><sphereGeometry args={[0.18, 48, 32]} /></mesh>
       <mesh ref={set('finA')} castShadow={shadow} material={steel}><boxGeometry args={[0.04, 4, 1.2]} /></mesh>
