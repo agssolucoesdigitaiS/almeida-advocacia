@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modelo: substitua https://www.seudominio.com.br pelo domínio real e use VITE_ROUTER=browser para URLs limpas -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.seudominio.com.br/</loc></url>
+  <url><loc>https://www.seudominio.com.br/areas/direito-civil</loc></url>
+
+
+  <url><loc>https://www.seudominio.com.br/artigos</loc></url>
+  <url><loc>https://www.seudominio.com.br/contato</loc></url>
+  <url><loc>https://www.seudominio.com.br/aviso-legal</loc></url>
+  <url><loc>https://www.seudominio.com.br/privacidade</loc></url>
+</urlset>
